@@ -24,7 +24,8 @@ let postSchema = new Schema({
         default: new Date()
     },
     renovation: {
-        type: Date
+        type: Date,
+        require: false
     },
     usuario: {
         type: Schema.Types.ObjectId,

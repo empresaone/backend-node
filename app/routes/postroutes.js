@@ -3,7 +3,7 @@ const app = express();
 const Post = require('../models/Post');
 const { verificaToken } = require('../middleware/autentication');
 
-app.get('/post', verificaToken, (req, res) => {
+app.get('/post', (req, res) => {
     Post.find()
         .populate('usuario', 'name email status')
         .exec((err, post) => {
@@ -30,6 +30,36 @@ app.get('/post', verificaToken, (req, res) => {
                 });
             });
         });
+});
+
+app.get('/post/:id', (req, res) => {
+
+    let id = req.params.id;
+    Post.findById(id, (err, post) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err: err,
+                message: 'Error al intentar listar el registro'
+            });
+        }
+
+        if (!post) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El id que introdujo no es válido'
+                }
+            });
+        }
+
+        res.json({
+            post: post,
+            ok: true,
+        });
+
+    });
 });
 
 app.post('/post', verificaToken, (req, res) => {
