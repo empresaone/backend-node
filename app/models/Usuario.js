@@ -39,6 +39,10 @@ let usuarioSchema = new Schema({
         type: Boolean,
         default: false
     },
+    posts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Post'
+    }]
 });
 
 usuarioSchema.methods.toJSON = function() {

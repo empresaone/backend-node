@@ -30,6 +30,14 @@ let postSchema = new Schema({
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario'
+    },
+    categoria: {
+        type: Schema.Types.ObjectId,
+        ref: 'Categoria'
+    },
+    subCategoria: {
+        type: Schema.Types.ObjectId,
+        ref: 'SubCategoria'
     }
 });
 

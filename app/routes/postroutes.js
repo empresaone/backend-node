@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const Post = require('../models/Post');
 const { verificaToken } = require('../middleware/autentication');
+const Usuario = require('../models/Usuario');
 
 app.get('/post', (req, res) => {
     Post.find()
         .populate('usuario', 'name email status')
+        .populate('post')
         .exec((err, post) => {
             if (err) {
                 return res.status(500).json({
@@ -64,7 +66,33 @@ app.get('/post/:id', (req, res) => {
         });
 });
 
-app.post('/post', verificaToken, (req, res) => {
+
+app.post('/post', verificaToken, async(req, res) => {
+
+    let body = req.body;
+
+    console.log(body);
+    let newPost = new Post(body);
+    console.log(newPost);
+
+    let id = req.usuario._id;
+    const usuario = await Usuario.findById(id);
+    console.log(usuario);
+
+    newPost.usuario = usuario;
+
+    await newPost.save();
+
+    usuario.posts.push(newPost);
+
+    await usuario.save();
+
+    res.send(newPost);
+
+});
+
+
+/* app.post('/post', verificaToken, (req, res) => {
 
     let body = req.body;
     let post = new Post({
@@ -90,7 +118,7 @@ app.post('/post', verificaToken, (req, res) => {
 
         });
     });
-});
+}); */
 
 app.put('/post/:id', verificaToken, (req, res) => {
 

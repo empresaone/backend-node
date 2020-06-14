@@ -7,6 +7,7 @@ let { verificaToken, veificaAdminRole } = require('../middleware/autentication')
 
 app.get('/usuario', [verificaToken, veificaAdminRole], (req, res) => {
     Usuario.find()
+        .populate('posts')
         .exec((err, usuarios) => {
             if (err) {
                 return res.status(500).json({
