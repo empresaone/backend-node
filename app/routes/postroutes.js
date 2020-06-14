@@ -92,4 +92,63 @@ app.post('/post', verificaToken, (req, res) => {
     });
 });
 
+app.put('/post/:id', verificaToken, (req, res) => {
+
+    let id = req.params.id;
+    let body = req.body;
+    Post.findByIdAndUpdate(id, body, { new: true }, (err, post) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err: err,
+                message: 'Error al intentar actualizar el registro'
+            });
+        }
+
+        if (!post) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El id que introdujo no es válido'
+                }
+            });
+        }
+
+        res.json({
+            post: post,
+            ok: true,
+            message: 'Registro actualizado satisfactoriamente'
+        });
+    });
+});
+
+
+app.delete('/post/:id', verificaToken, (req, res) => {
+    let id = req.params.id;
+    Post.findOneAndRemove(id, (err, post) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err: err,
+                message: 'Error al intentar eliminar el registro'
+            });
+        }
+
+        if (!post) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El id que introdujo no es válido'
+                }
+            });
+        }
+
+        res.json({
+            post: post,
+            ok: true,
+            message: 'Registro eliminado satisfactoriamente'
+        });
+    });
+});
+
 module.exports = app;
