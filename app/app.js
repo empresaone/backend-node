@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(require('./routes/usuarioroutes'));
 app.use(require('./routes/login'));
+app.use(require('./routes/postroutes'));
 
 mongoose.connect(process.env.URI_BD, {
     useCreateIndex: true,
