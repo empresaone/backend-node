@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 let { verificaToken, veificaAdminRole } = require('../middleware/autentication');
 
-app.get('/usuario', verificaToken, (req, res) => {
+app.get('/usuario', [verificaToken, veificaAdminRole], (req, res) => {
     Usuario.find()
         .exec((err, usuarios) => {
             if (err) {
