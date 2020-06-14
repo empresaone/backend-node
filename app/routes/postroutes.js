@@ -35,31 +35,33 @@ app.get('/post', (req, res) => {
 app.get('/post/:id', (req, res) => {
 
     let id = req.params.id;
-    Post.findById(id, (err, post) => {
+    Post.findById(id)
+        .populate('usuario', 'name email status')
+        .exec((err, post) => {
 
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err: err,
-                message: 'Error al intentar listar el registro'
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err: err,
+                    message: 'Error al intentar listar el registro'
+                });
+            }
+
+            if (!post) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'El id que introdujo no es válido'
+                    }
+                });
+            }
+
+            res.json({
+                post: post,
+                ok: true,
             });
-        }
 
-        if (!post) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'El id que introdujo no es válido'
-                }
-            });
-        }
-
-        res.json({
-            post: post,
-            ok: true,
         });
-
-    });
 });
 
 app.post('/post', verificaToken, (req, res) => {
