@@ -3,7 +3,7 @@ const app = express();
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-let { verificaToken } = require('../middleware/autentication');
+let { verificaToken, veificaAdminRole } = require('../middleware/autentication');
 
 app.get('/usuario', verificaToken, (req, res) => {
     Usuario.find()
@@ -90,7 +90,7 @@ app.post('/usuario', (req, res) => {
     });
 });
 
-app.put('/usuario/:id', verificaToken, (req, res) => {
+app.put('/usuario/:id', [verificaToken, veificaAdminRole], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['name', 'image', 'role', 'status', 'google']);
@@ -120,7 +120,7 @@ app.put('/usuario/:id', verificaToken, (req, res) => {
     });
 });
 
-app.delete('/usuario/:id', verificaToken, (req, res) => {
+app.delete('/usuario/:id', [verificaToken, veificaAdminRole], (req, res) => {
     let id = req.params.id;
     Usuario.findOneAndRemove(id, (err, usuario) => {
         if (err) {
