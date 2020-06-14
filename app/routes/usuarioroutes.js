@@ -103,7 +103,7 @@ app.put('/usuario/:id', (req, res) => {
         }
 
         if (!usuario) {
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 err: {
                     message: 'El id que introdujo no es válido'
@@ -131,7 +131,7 @@ app.delete('/usuario/:id', (req, res) => {
         }
 
         if (!usuario) {
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 err: {
                     message: 'El id que introdujo no es válido'

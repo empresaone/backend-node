@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(require('./routes/usuarioroutes'));
+app.use(require('./routes/login'));
 
 mongoose.connect(process.env.URI_BD, {
     useCreateIndex: true,
